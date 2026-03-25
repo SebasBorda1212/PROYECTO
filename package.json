@@ -9,7 +9,7 @@
     "build:prod": "ng build --configuration production",
     "test": "ng test",
     "serve:ssr:proyecto_inicial": "node dist/proyecto_inicial/server/server.mjs",
-    "deploy": "ng build --configuration production --base-href=/gestor_tareas_angular/ && npx angular-cli-ghpages --dir=dist/proyecto_inicial/browser"
+    "deploy": "ng build --configuration production --base-href=/PROYECTO/ && npx angular-cli-ghpages --dir=dist/proyecto_inicial/browser"
   },
   "prettier": {
     "printWidth": 100,
@@ -44,6 +44,7 @@
     "@angular/compiler-cli": "^21.1.0",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
+    "cross-env": "^10.1.0",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

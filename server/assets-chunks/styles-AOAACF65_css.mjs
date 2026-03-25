@@ -1,2 +1,0 @@
-export default `*{box-sizing:border-box}html{height:100%;font-size:16px}body{font-family:Poppins,sans-serif;background:linear-gradient(270deg,#2e026d,#4c1d95,#6d28d9,#7e22ce,#a21caf);background-size:1000% 1000%;animation:gradientMove 15s ease infinite;color:#f5e9ff;margin:0;padding:0;height:100%;position:relative;overflow-x:hidden;line-height:1.5}@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}to{background-position:0% 50%}}
-`;

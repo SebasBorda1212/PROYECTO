@@ -1,0 +1,39 @@
+article {
+    padding: 1rem;
+    color: #f5e9ff;
+    background: linear-gradient(135deg, #2e026d, #4c1d95, #6d28d9);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(162, 28, 175, 0.3);
+}
+
+h2 {
+    margin: 0;
+}
+
+time {
+    color: #d8b4fe;
+}
+
+.acciones {
+    text-align: right;
+    margin: 0;
+}
+
+.acciones button {
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6d28d9, #a21caf);
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    box-shadow: 0 2px 8px rgba(162, 28, 175, 0.4);
+    transition: all 0.3s ease;
+}
+
+.acciones button:hover,
+.acciones button:active {
+    background: linear-gradient(135deg, #7e22ce, #c026d3);
+    box-shadow: 0 4px 15px rgba(162, 28, 175, 0.6);
+}

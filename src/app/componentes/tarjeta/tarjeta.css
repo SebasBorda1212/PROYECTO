@@ -1,0 +1,6 @@
+div {
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(76, 29, 149, 0.3); /* sombra morada */
+  overflow: hidden;
+  background-color: #1b002b; /* fondo morado oscuro */
+}

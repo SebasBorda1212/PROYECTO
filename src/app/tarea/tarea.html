@@ -1,10 +1,19 @@
-<app-tarjeta>
+<app-tarjeta [class.completada]="tarea.completada == 1">
   <article>
-    <h2>{{ tarea.titulo }}</h2>
+    <h2 [style.text-decoration]="tarea.completada == 1 ? 'line-through' : 'none'">
+      {{ tarea.titulo }}
+    </h2>
     <time>{{ tarea.expira | date: 'fullDate' }}</time>
     <p>{{ tarea.resumen }}</p>
+
     <p class="acciones">
-      <button (click)="alCompletarTarea()">Terminada</button>
+      @if (tarea.completada == 0) {
+        <button (click)="onCompletar()">Terminada</button>
+      } @else {
+        <span class="status-ok">✅ Completada</span>
+      }
+
+      <button class="btn-borrar" (click)="onEliminar()">Eliminar</button>
     </p>
   </article>
 </app-tarjeta>

@@ -11,13 +11,16 @@
   </header>
 
   <ul>
-    <!-- Usamos $any($event) para evitar el error de tipado -->
-    @for (tarea of (tareasUsuarioSeleccionado | async); track tarea.id) {
+    @for (tarea of (tareas$ | async); track tarea.id) {
       <li>
-        <app-tarea [tarea]="tarea" (completar)="alCompletarTarea($any($event))" />
+        <app-tarea
+          [tarea]="tarea"
+          (completar)="alCompletarTarea($any($event))"
+          (eliminar)="alEliminarTarea($any($event))"
+        />
       </li>
     } @empty {
-      <p style="color: #cbd5e1; padding: 1rem;">No hay tareas para este usuario en MySQL.</p>
+      <p style="color: #cbd5e1; padding: 1rem;">No hay tareas pendientes en la base de datos.</p>
     }
   </ul>
 </section>

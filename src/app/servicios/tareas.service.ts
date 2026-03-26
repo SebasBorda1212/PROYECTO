@@ -1,17 +1,21 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NuevaTareaInfo } from '../tarea/tarea.model';
+import { Subject, tap, switchMap, startWith } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TareasService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/tareas';
+  private _refresh$ = new Subject<void>();
 
-  // Ahora pedimos las tareas específicas del usuario seleccionado
+  get refresh$() { return this._refresh$; }
+
   obtenerTareasDeUsuario(idUsuario: string) {
-    return this.http.get<any[]>(`${this.apiUrl}/${idUsuario}`);
+    return this.refresh$.pipe(
+      startWith(null),
+      switchMap(() => this.http.get<any[]>(`${this.apiUrl}/${idUsuario}`))
+    );
   }
 
   agregarTarea(infoDeTarea: NuevaTareaInfo, idUsuario: string) {
@@ -22,10 +26,16 @@ export class TareasService {
       expira: infoDeTarea.fecha,
       idusuario: idUsuario
     };
-    return this.http.post(this.apiUrl, nuevaTarea);
+    return this.http.post(this.apiUrl, nuevaTarea).pipe(tap(() => this._refresh$.next()));
   }
 
-  eliminarTarea(id: string) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  // MÉTODO PARA COMPLETAR (Poner el 1 en Workbench)
+  completarTarea(id: string) {
+    return this.http.patch(`${this.apiUrl}/${id}`, {}).pipe(tap(() => this._refresh$.next()));
+  }
+
+  // MÉTODO PARA ELIMINAR (Borrar fila en Workbench)
+  eliminarTareaFisicamente(id: string) {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(tap(() => this._refresh$.next()));
   }
 }

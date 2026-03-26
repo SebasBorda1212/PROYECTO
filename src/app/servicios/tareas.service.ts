@@ -1,73 +1,31 @@
-import { tarea } from './../tarea/tarea.model';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { NuevaTareaInfo } from '../tarea/tarea.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TareasService {
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:3000/tareas';
 
-  private tareas = [
-    {
-      id: 't1',
-      idUsuario: 'u1',
-      titulo: 'Lanzar misión tripulada a Marte',
-      resumen: 'Supervisar las últimas pruebas del motor Raptor en Starbase y confirmar la ventana de lanzamiento.',
-      expira: '2027-05-04'
-    },
-    {
-      id: 't2',
-      idUsuario: 'u2',
-      titulo: 'Anunciar nuevo álbum',
-      resumen: 'Terminar de grabar los "Vault Tracks" en el estudio y preparar los easter eggs para el video musical.',
-      expira: '2025-11-13',
-    },
-    {
-      id: 't3',
-      idUsuario: 'u3',
-      titulo: 'Entrenamiento de tiros libres',
-      resumen: 'Practicar 100 tiros libres al ángulo y repasar la táctica de juego con el equipo.',
-      expira: '2025-07-15',
-    },
-    {
-      id: 't4',
-      idUsuario: 'u4',
-      titulo: 'Comprobar la Relatividad General',
-      resumen: 'Analizar los datos de las nuevas observaciones astronómicas sobre la curvatura del espacio-tiempo.',
-      expira: '2025-03-14',
-    },
-  ];
-  constructor(){
-    const tareas = localStorage.getItem('tareas')
-
-
-  }
-
-
+  // Ahora pedimos las tareas específicas del usuario seleccionado
   obtenerTareasDeUsuario(idUsuario: string) {
-    return this.tareas.filter((tarea) => tarea.idUsuario === idUsuario);
+    return this.http.get<any[]>(`${this.apiUrl}/${idUsuario}`);
   }
 
-  agregarTarea(infoDeTarea: NuevaTareaInfo, idUsuario:string) {
-    this.tareas.unshift({
+  agregarTarea(infoDeTarea: NuevaTareaInfo, idUsuario: string) {
+    const nuevaTarea = {
       id: new Date().getTime().toString(),
       titulo: infoDeTarea.titulo,
       resumen: infoDeTarea.resumen,
       expira: infoDeTarea.fecha,
-      idUsuario: idUsuario
-    });
-    this.guardarTareas();
-
+      idusuario: idUsuario
+    };
+    return this.http.post(this.apiUrl, nuevaTarea);
   }
 
   eliminarTarea(id: string) {
-    this.tareas = this.tareas.filter((tarea) => tarea.id !== id)
-    this.guardarTareas();
-
-  }
-
-  private guardarTareas(){
-    localStorage.setItem('tareas',JSON.stringify(this.tareas));
-
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

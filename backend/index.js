@@ -22,34 +22,43 @@ const dbConfig = {
     user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
     password: process.env.MYSQLPASSWORD || process.env.DB_PASS || '',
     port: process.env.MYSQLPORT || 3306,
+    database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'tareas_db',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 };
 
-let pool;
+// Crear el Pool directamente
+const pool = mysql.createPool(dbConfig);
 
-async function setupBackend() {
-    console.log('🔍 Iniciando verificación de backend...');
-    
-    // 1. Conexión inicial para asegurar que la DB existe
-    const tempConn = mysql.createConnection(dbConfig);
-    const dbName = process.env.MYSQLDATABASE || process.env.DB_NAME || 'tareas_db';
+function setupTables() {
+    console.log('🔍 Verificando existencia de tablas...');
+    const queries = [
+        `CREATE TABLE IF NOT EXISTS administradores (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(50) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL
+        )`,
+        `CREATE TABLE IF NOT EXISTS tareas (
+            id VARCHAR(50) PRIMARY KEY,
+            titulo VARCHAR(255) NOT NULL,
+            resumen TEXT,
+            expira DATE,
+            idusuario VARCHAR(50),
+            completada TINYINT(1) DEFAULT 0
+        )`
+    ];
 
-    tempConn.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`, (err) => {
-        if (err) {
-            console.error('❌ Error al verificar/crear base de datos:', err.message);
-            tempConn.end();
-            return;
-        }
-        console.log(`✅ Base de datos "${dbName}" lista.`);
-        tempConn.end();
-
-        // 2. Crear el Pool definitivo
-        pool = mysql.createPool({ ...dbConfig, database: dbName });
-        
-        // 3. Crear tablas
-        setupTables();
+    let completed = 0;
+    queries.forEach(q => {
+        pool.query(q, (err) => {
+            if (err) console.error('❌ Error verificando tabla:', err.message);
+            completed++;
+            if (completed === queries.length) {
+                console.log('📊 Esquema de tablas verificado.');
+                seedAdmin();
+            }
+        });
     });
 }
 
@@ -99,7 +108,7 @@ function seedAdmin() {
     });
 }
 
-setupBackend();
+setupTables();
 
 // Middleware JWT
 const verificarToken = (req, res, next) => {

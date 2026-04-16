@@ -1,0 +1,43 @@
+<div class="fondo" (click)="alCerrar()"></div>
+<dialog open>
+  <h2>Configuración Administrativa</h2>
+  
+  <div class="tabs">
+    <button [class.activo]="tab === 'perfil'" (click)="tab = 'perfil'">Mi Perfil</button>
+    <button [class.activo]="tab === 'nuevo'" (click)="tab = 'nuevo'">Nuevo Admin</button>
+  </div>
+
+  <section *ngIf="tab === 'perfil'" class="seccion-tab">
+    <h3>Editar Mis Datos</h3>
+    <form (ngSubmit)="actualizarPerfil()">
+      <p>
+        <label for="perfil-user">Nuevo Usuario</label>
+        <input type="text" id="perfil-user" name="user" [(ngModel)]="perfilUser" />
+      </p>
+      <p>
+        <label for="perfil-pass">Nueva Contraseña (Opcional)</label>
+        <input type="password" id="perfil-pass" name="pass" [(ngModel)]="perfilPass" placeholder="Dejar vacío para no cambiar" />
+      </p>
+      <button type="submit" class="btn-primario">Actualizar</button>
+    </form>
+  </section>
+
+  <section *ngIf="tab === 'nuevo'" class="seccion-tab">
+    <h3>Crear Nuevo Administrador</h3>
+    <form (ngSubmit)="crearAdmin()">
+      <p>
+        <label for="nuevo-user">Usuario</label>
+        <input type="text" id="nuevo-user" name="nuser" [(ngModel)]="nuevoUser" />
+      </p>
+      <p>
+        <label for="nuevo-pass">Contraseña</label>
+        <input type="password" id="nuevo-pass" name="npass" [(ngModel)]="nuevoPass" />
+      </p>
+      <button type="submit" class="btn-secundario">Registrar</button>
+    </form>
+  </section>
+
+  <div class="acciones-finales">
+    <button type="button" (click)="alCerrar()">Cerrar</button>
+  </div>
+</dialog>

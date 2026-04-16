@@ -1,0 +1,29 @@
+@if (estaAgregandoTareaNueva) {
+  <app-nueva-tarea [idUsuario]="idUsuario" [tarea]="tareaAEditar" (cerrar)="alCerrarTareaNueva()" />
+}
+
+<section id="tareas">
+  <header>
+    <h2>Tareas de {{ nombre }}</h2>
+    <menu>
+      @if (authService.isLoggedIn$ | async) {
+        <button (click)="alIniciarNuevaTarea()">Agregar Tarea Nueva</button>
+      }
+    </menu>
+  </header>
+
+  <ul>
+    @for (tarea of (tareas$ | async); track tarea.id) {
+      <li>
+        <app-tarea
+          [tarea]="tarea"
+          (completar)="alCompletarTarea($any($event))"
+          (editar)="alEditarTarea($event)"
+          (eliminar)="alEliminarTarea($any($event))"
+        />
+      </li>
+    } @empty {
+      <p style="color: #cbd5e1; padding: 1rem;">No hay tareas pendientes en la base de datos.</p>
+    }
+  </ul>
+</section>

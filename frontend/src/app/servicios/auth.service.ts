@@ -2,12 +2,13 @@ import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, tap, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/login';
+  private apiUrl = `${environment.apiUrl}/login`;
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   
@@ -70,14 +71,14 @@ export class AuthService {
 
   // ADMINISTRACIÓN: Registrar nuevo Admin
   registrarAdmin(username: string, password: string): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/administradores', { username, password });
+    return this.http.post<any>(`${environment.apiUrl}/administradores`, { username, password });
   }
 
   // PERFIL: Actualizar datos propios
   actualizarPerfil(username: string, password?: string): Observable<any> {
     const data: any = { username };
     if (password) data.password = password;
-    return this.http.patch<any>('http://localhost:3000/administradores/perfil', data).pipe(
+    return this.http.patch<any>(`${environment.apiUrl}/administradores/perfil`, data).pipe(
       tap(res => {
         if (this.isBrowser && res) {
           localStorage.setItem('admin_username', username);

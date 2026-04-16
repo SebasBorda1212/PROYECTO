@@ -2,11 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NuevaTareaInfo } from '../tarea/tarea.model';
 import { Subject, tap, switchMap, startWith } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TareasService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/tareas';
+  private apiUrl = `${environment.apiUrl}/tareas`;
   private _refresh$ = new Subject<void>();
 
   get refresh$() { return this._refresh$; }

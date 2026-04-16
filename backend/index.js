@@ -16,10 +16,12 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Configuración de la base de datos desde .env
+// Configuración de la base de datos (Prioriza Railway)
 const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '',
+    host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+    user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+    password: process.env.MYSQLPASSWORD || process.env.DB_PASS || '',
+    port: process.env.MYSQLPORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -32,7 +34,7 @@ async function setupBackend() {
     
     // 1. Conexión inicial para asegurar que la DB existe
     const tempConn = mysql.createConnection(dbConfig);
-    const dbName = process.env.DB_NAME || 'tareas_db';
+    const dbName = process.env.MYSQLDATABASE || process.env.DB_NAME || 'tareas_db';
 
     tempConn.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`, (err) => {
         if (err) {

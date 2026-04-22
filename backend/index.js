@@ -26,7 +26,7 @@ const dbConfig = {
     user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
     password: process.env.MYSQLPASSWORD || process.env.DB_PASS || '',
     port: process.env.MYSQLPORT || 3306,
-    database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'tareas_db',
+    database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || process.env.DB_NAME || 'tareas_db',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0

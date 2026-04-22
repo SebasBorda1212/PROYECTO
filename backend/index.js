@@ -8,7 +8,11 @@ const jwt = require('jsonwebtoken');
 const app = express();
 
 const corsOptions = {
-    origin: [process.env.FRONTEND_URL || 'http://localhost:4200', 'http://localhost:4200'],
+    origin: [
+        process.env.FRONTEND_URL || 'http://localhost:4200', 
+        'http://localhost:4200',
+        'https://proyecto-lemon-three.vercel.app'
+    ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 };

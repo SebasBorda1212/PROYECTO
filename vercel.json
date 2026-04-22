@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd frontend && npm install && npm run build:prod",
+  "outputDirectory": "frontend/dist/proyecto_inicial/browser",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

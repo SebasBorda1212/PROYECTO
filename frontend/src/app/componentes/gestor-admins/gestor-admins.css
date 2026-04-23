@@ -1,9 +1,10 @@
 .gestor-container {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     padding: 1.5rem;
     border-radius: 12px;
-    border: 1px solid rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(0, 210, 255, 0.2);
     margin-top: 1rem;
+    backdrop-filter: blur(10px);
   }
   
   .header {
@@ -15,23 +16,25 @@
   
   .header h3 {
     margin: 0;
-    color: #ffd700; /* Dorado para admins */
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    color: #00d2ff; /* Cyan para admins */
+    text-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
   }
   
   .btn-nuevo {
-    background: linear-gradient(135deg, #ffd700, #b8860b);
-    color: #000;
+    background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+    color: #fff;
     border: none;
     padding: 0.6rem 1.2rem;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 210, 255, 0.3);
   }
   
   .btn-nuevo:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 210, 255, 0.5);
   }
   
   .grid-admins {
@@ -41,13 +44,19 @@
   }
   
   .admin-card {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(15, 23, 42, 0.6);
     padding: 1rem;
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-left: 4px solid #ffd700;
+    border-left: 4px solid #00d2ff;
+    transition: transform 0.2s;
+  }
+  
+  .admin-card:hover {
+    transform: translateX(5px);
+    background: rgba(15, 23, 42, 0.8);
   }
   
   .admin-info {
@@ -66,12 +75,14 @@
     border: none;
     cursor: pointer;
     font-size: 1.2rem;
-    opacity: 0.7;
+    opacity: 0.6;
     transition: opacity 0.2s;
+    filter: saturate(0) brightness(2);
   }
   
   .btn-delete:hover {
     opacity: 1;
+    filter: saturate(1) brightness(1);
   }
   
   /* Modal Styles */
@@ -81,24 +92,25 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
   }
   
   .modal {
-    background: #1e1b2e;
+    background: #111827;
     padding: 2rem;
     border-radius: 15px;
     width: 90%;
     max-width: 400px;
-    border: 1px solid #ffd700;
+    border: 1px solid #00d2ff;
+    box-shadow: 0 0 30px rgba(0, 210, 255, 0.15);
   }
   
-  .modal h2 { margin-top: 0; color: #ffd700; }
+  .modal h2 { margin-top: 0; color: #00d2ff; }
   
   .form-group {
     margin-bottom: 1.2rem;
@@ -106,7 +118,7 @@
   
   .form-group label {
     display: block;
-    color: #cbd5e1;
+    color: #94a3b8;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
   }
@@ -115,8 +127,8 @@
     width: 100%;
     padding: 0.8rem;
     border-radius: 6px;
-    border: 1px solid #334155;
-    background: #0f172a;
+    border: 1px solid #1e293b;
+    background: #020617;
     color: white;
   }
   
@@ -127,8 +139,8 @@
   }
   
   .btn-cancelar {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
     border: none;
     padding: 0.6rem 1.2rem;
     border-radius: 6px;
@@ -136,11 +148,12 @@
   }
   
   .btn-guardar {
-    background: #ffd700;
-    color: #000;
+    background: linear-gradient(135deg, #0cebeb, #20e2ff, #0083b0);
+    color: #fff;
     border: none;
     padding: 0.6rem 1.2rem;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 210, 255, 0.2);
   }

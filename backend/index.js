@@ -23,11 +23,11 @@ app.use(express.json());
 
 // Configuración compatible con TiDB Cloud (Soporte para CA Física)
 const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    port: parseInt(process.env.DB_PORT || '4000'),
-    database: process.env.DB_NAME || 'test',
+    host: process.env.MYSQLHOST || process.env.DB_HOST,
+    user: process.env.MYSQLUSER || process.env.DB_USER,
+    password: process.env.MYSQLPASSWORD || process.env.DB_PASS,
+    port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT || '4000'),
+    database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'test',
     ssl: {
         minVersion: 'TLSv1.2',
         rejectUnauthorized: true,

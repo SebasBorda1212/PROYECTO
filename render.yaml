@@ -13,7 +13,7 @@ services:
       - key: MYSQLUSER
         value: 4DaXzFDhjqNzBz2.root
       - key: MYSQLPASSWORD
-        value: IJB4ZNE161wHu5R8
+        value: O4WrPwIK6hWtKAf2
       - key: MYSQLDATABASE
         value: test
       - key: MYSQLPORT

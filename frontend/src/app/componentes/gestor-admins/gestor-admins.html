@@ -1,0 +1,35 @@
+<div class="gestor-container">
+    <div class="header">
+      <h3>🛡️ Gestión de Administradores</h3>
+      <button class="btn-nuevo" (click)="abrirModal()">+ Nuevo Admin</button>
+    </div>
+  
+    <div class="grid-admins">
+      <div *ngFor="let admin of admins()" class="admin-card">
+        <div class="admin-info">
+          <span class="icon">👤</span>
+          <span class="username">{{ admin.username }}</span>
+        </div>
+        <button class="btn-delete" (click)="eliminarAdmin(admin.id, admin.username)">🗑️</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal para nuevo admin -->
+  <div class="modal-overlay" *ngIf="showModal()">
+    <div class="modal">
+      <h2>🆕 Nuevo Administrador</h2>
+      <div class="form-group">
+        <label>Usuario</label>
+        <input type="text" [(ngModel)]="nuevoAdmin.username" placeholder="Nombre de usuario">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="nuevoAdmin.password" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn-guardar" (click)="guardarAdmin()">Guardar</button>
+      </div>
+    </div>
+  </div>

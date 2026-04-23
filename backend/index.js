@@ -238,6 +238,45 @@ app.delete('/usuarios/:id', checkDB, verificarToken, (req, res) => {
 });
 
 // ==========================================
+// RUTAS DE GESTIÓN DE ADMINISTRADORES
+// ==========================================
+
+// GET: Listar todos los administradores (Protegido)
+app.get('/admins', checkDB, verificarToken, (req, res) => {
+    pool.query('SELECT id, username FROM administradores', (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+    });
+});
+
+// POST: Crear nuevo administrador (Protegido)
+app.post('/admins', checkDB, verificarToken, async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const sql = 'INSERT INTO administradores (username, password) VALUES (?, ?)';
+        pool.query(sql, [username, hashedPassword], (err) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ mensaje: 'El nombre de usuario ya existe' });
+                return res.status(500).json(err);
+            }
+            res.json({ mensaje: 'Nuevo administrador creado' });
+        });
+    } catch (e) {
+        res.status(500).json({ mensaje: 'Error al procesar contraseña' });
+    }
+});
+
+// DELETE: Eliminar administrador (Protegido)
+app.delete('/admins/:id', checkDB, verificarToken, (req, res) => {
+    // Evitar que un admin se borre a sí mismo si solo hay uno (opcional, pero recomendado)
+    pool.query('DELETE FROM administradores WHERE id = ?', [req.params.id], (err) => {
+        if (err) return res.status(500).json(err);
+        res.json({ mensaje: 'Administrador eliminado' });
+    });
+});
+
+// ==========================================
 // RUTAS DE TAREAS
 // ==========================================
 

@@ -2,8 +2,25 @@
 
 <main>
   @if (auth.isLoggedIn$ | async) {
-    <div class="admin-controls" style="text-align: center; margin-bottom: 20px;">
-      <button class="btn-premium" (click)="gestorUsuarios.abrirCrear()" style="background: #20c997; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">+ Nuevo Usuario</button>
+    <div class="admin-toolbar" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;">
+      <button class="btn-admin" (click)="toggleUsuarios()" [style.border-bottom]="seccionActiva === 'usuarios' ? '2px solid #20c997' : 'none'">
+        👥 Gestionar Usuarios
+      </button>
+      <button class="btn-admin" (click)="toggleAdmins()" [style.border-bottom]="seccionActiva === 'admins' ? '2px solid #ffd700' : 'none'">
+        🛡️ Gestionar Admins
+      </button>
+    </div>
+
+    <!-- Secciones Dinámicas -->
+    <div *ngIf="seccionActiva === 'usuarios'" class="admin-section fade-in">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button class="btn-premium" (click)="gestorUsuarios.abrirCrear()" style="background: #20c997; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">+ Nuevo Usuario</button>
+        </div>
+        <app-gestor-usuarios />
+    </div>
+
+    <div *ngIf="seccionActiva === 'admins'" class="admin-section fade-in">
+        <app-gestor-admins />
     </div>
   }
 
@@ -33,5 +50,4 @@
     <p id="textoCondicional">Selecciona un usuario de la lista</p>
   }
 
-  <app-gestor-usuarios />
 </main>

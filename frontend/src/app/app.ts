@@ -4,13 +4,14 @@ import { Usuario } from './componentes/usuario/usuario';
 import { Tareas } from './componentes/tareas/tareas';
 import { UsuariosService } from './servicios/usuarios.service';
 import { GestorUsuarios } from './componentes/gestor-usuarios/gestor-usuarios';
+import { GestorAdmins } from './componentes/gestor-admins/gestor-admins';
 import { AuthService } from './servicios/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, Encabezado, Usuario, Tareas, GestorUsuarios],
+  imports: [CommonModule, Encabezado, Usuario, Tareas, GestorUsuarios, GestorAdmins],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -20,6 +21,17 @@ export class App {
   public auth = inject(AuthService); // Añadido para controlar visibilidad de roles
   
   @ViewChild(GestorUsuarios) gestorUsuarios!: GestorUsuarios;
+
+  // Control de secciones administrativas
+  seccionActiva: 'ninguna' | 'usuarios' | 'admins' = 'ninguna';
+
+  toggleUsuarios() {
+    this.seccionActiva = this.seccionActiva === 'usuarios' ? 'ninguna' : 'usuarios';
+  }
+
+  toggleAdmins() {
+    this.seccionActiva = this.seccionActiva === 'admins' ? 'ninguna' : 'admins';
+  }
 
   get usuarios() {
     return this.usuariosService.usuarios();

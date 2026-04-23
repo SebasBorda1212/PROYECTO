@@ -10,12 +10,11 @@
       <p class="acciones">
         @if (tarea.completada == 0) {
           <button (click)="onCompletar()">Terminada</button>
+          <button class="btn-editar" (click)="onEditar()">Editar</button>
+          <button class="btn-borrar" (click)="onEliminar()">Eliminar</button>
         } @else {
           <button class="btn-reabrir" (click)="onReabrir()">Reabrir</button>
         }
-
-        <button class="btn-editar" (click)="onEditar()">Editar</button>
-        <button class="btn-borrar" (click)="onEliminar()">Eliminar</button>
       </p>
     }
   </article>

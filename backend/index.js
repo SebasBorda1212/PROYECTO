@@ -4,6 +4,8 @@ const cors = require('cors');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 
@@ -19,32 +21,31 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Configuración de la base de datos (Compatible con Railway y TiDB Cloud)
+// Configuración compatible con TiDB Cloud (Soporte para CA Física)
 const dbConfig = {
-    host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
-    user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
-    password: process.env.MYSQLPASSWORD || process.env.DB_PASS || '',
-    port: process.env.MYSQLPORT || process.env.DB_PORT || 3306,
-    database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || process.env.DB_NAME || 'tareas_db',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    // Soporte para SSL (Requerido por TiDB Cloud)
-    ssl: (process.env.MYSQLHOST || process.env.DB_HOST)?.includes('tidbcloud.com') ? {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    port: parseInt(process.env.DB_PORT || '4000'),
+    database: process.env.DB_NAME || 'test',
+    ssl: {
         minVersion: 'TLSv1.2',
-        rejectUnauthorized: true
-    } : null
+        rejectUnauthorized: true,
+        ca: fs.readFileSync(path.join(__dirname, 'ca.pem'))
+    }
 };
 
-// Crear el Pool directamente
+// Crear el Pool
 const pool = mysql.createPool(dbConfig);
 
 function setupTables() {
     console.log('🔍 [Auto-healing] Verificando esquema de base de datos...');
     
-    // Convert pool.query to promise-based to handle sequential execution if needed, 
-    // but here we keep it simple with a count.
+    const dbName = process.env.MYSQLDATABASE || process.env.DB_NAME || 'tareas_db';
+
     const queries = [
+        `CREATE DATABASE IF NOT EXISTS ${dbName}`,
+        `USE ${dbName}`,
         `CREATE TABLE IF NOT EXISTS administradores (
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(50) UNIQUE NOT NULL,

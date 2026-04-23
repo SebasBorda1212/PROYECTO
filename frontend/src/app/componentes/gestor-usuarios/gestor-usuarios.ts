@@ -13,7 +13,7 @@ import { AuthService } from '../../servicios/auth.service';
   styleUrl: './gestor-usuarios.css'
 })
 export class GestorUsuarios {
-  private usuariosService = inject(UsuariosService);
+  usuariosService = inject(UsuariosService);
   public auth = inject(AuthService);
 
   isOpen = signal(false);

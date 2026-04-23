@@ -32,14 +32,6 @@
           [usuario]="usuario"
           (seleccion)="alSeleccionarUsuario($event)"
         />
-        @if (auth.isLoggedIn$ | async) {
-          <button 
-            (click)="gestorUsuarios.abrirEditar(usuario)"
-            style="position: absolute; top: -5px; right: -5px; background: #007bff; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; cursor: pointer; z-index: 10;"
-            title="Editar Usuario">
-            ✎
-          </button>
-        }
       </li>
     }
   </ul>

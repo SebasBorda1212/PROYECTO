@@ -19,24 +19,31 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Configuración de la base de datos desde .env
-// Configuración de la base de datos (Prioriza Railway)
+// Configuración de la base de datos (Compatible con Railway y TiDB Cloud)
 const dbConfig = {
     host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
     user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
     password: process.env.MYSQLPASSWORD || process.env.DB_PASS || '',
-    port: process.env.MYSQLPORT || 3306,
+    port: process.env.MYSQLPORT || process.env.DB_PORT || 3306,
     database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || process.env.DB_NAME || 'tareas_db',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    // Soporte para SSL (Requerido por TiDB Cloud)
+    ssl: (process.env.MYSQLHOST || process.env.DB_HOST)?.includes('tidbcloud.com') ? {
+        minVersion: 'TLSv1.2',
+        rejectUnauthorized: true
+    } : null
 };
 
 // Crear el Pool directamente
 const pool = mysql.createPool(dbConfig);
 
 function setupTables() {
-    console.log('🔍 Verificando existencia de tablas...');
+    console.log('🔍 [Auto-healing] Verificando esquema de base de datos...');
+    
+    // Convert pool.query to promise-based to handle sequential execution if needed, 
+    // but here we keep it simple with a count.
     const queries = [
         `CREATE TABLE IF NOT EXISTS administradores (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -59,17 +66,25 @@ function setupTables() {
         )`
     ];
 
-    let completed = 0;
-    queries.forEach(q => {
-        pool.query(q, (err) => {
-            if (err) console.error('❌ Error verificando tabla:', err.message);
-            completed++;
-            if (completed === queries.length) {
-                console.log('📊 Esquema de tablas verificado.');
-                seedAdmin();
-            }
-        });
-    });
+    let current = 0;
+    const runNextQuery = () => {
+        if (current < queries.length) {
+            pool.query(queries[current], (err) => {
+                if (err) {
+                    console.error(`❌ Error en query ${current + 1}:`, err.message);
+                } else {
+                    console.log(`✅ Tabla ${current + 1}/${queries.length} verificada.`);
+                }
+                current++;
+                runNextQuery();
+            });
+        } else {
+            console.log('📊 [Auto-healing] Esquema completado.');
+            seedAdmin();
+        }
+    };
+
+    runNextQuery();
 }
 
 function seedAdmin() {

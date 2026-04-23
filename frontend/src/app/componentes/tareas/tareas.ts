@@ -58,6 +58,16 @@ export class Tareas implements OnChanges {
     });
   }
 
+  alReabrirTarea(id: string) {
+    this.tareasService.reabrirTarea(id).subscribe({
+      next: () => {
+        console.log('🔄 Tarea reabierta');
+        this.cargarTareas();
+      },
+      error: (err: any) => console.error('❌ Error al reabrir:', err)
+    });
+  }
+
   alEliminarTarea(id: string) {
     this.tareasService.eliminarTareaFisicamente(id).subscribe({
       next: () => {

@@ -53,12 +53,14 @@ time {
     border: 1px solid rgba(216, 180, 254, 0.2);
 }
 
-/* Estilo para el texto de "Completada" */
-.status-ok {
-    color: #4ade80;
-    font-weight: bold;
-    font-size: 0.9rem;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+/* Estilo para el botón de Reabrir (Amarillo/Ámbar para contrastar) */
+.btn-reabrir {
+    background: linear-gradient(135deg, #d97706, #b45309) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-reabrir:hover {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
 }
 
 /* Botón específico de Eliminar (Rojo/Vino) */

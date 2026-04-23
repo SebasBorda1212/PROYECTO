@@ -14,6 +14,7 @@ export class Tarea {
   @Input({ required: true }) tarea!: any;
 
   @Output() completar = new EventEmitter<string>();
+  @Output() reabrir = new EventEmitter<string>();
   @Output() eliminar = new EventEmitter<string>();
   @Output() editar = new EventEmitter<any>();
   
@@ -21,6 +22,10 @@ export class Tarea {
 
   onCompletar() {
     this.completar.emit(this.tarea.id);
+  }
+
+  onReabrir() {
+    this.reabrir.emit(this.tarea.id);
   }
 
   onEditar() {

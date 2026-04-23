@@ -11,7 +11,7 @@
         @if (tarea.completada == 0) {
           <button (click)="onCompletar()">Terminada</button>
         } @else {
-          <span class="status-ok">✅ Completada</span>
+          <button class="btn-reabrir" (click)="onReabrir()">Reabrir</button>
         }
 
         <button class="btn-editar" (click)="onEditar()">Editar</button>

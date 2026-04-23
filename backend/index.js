@@ -178,11 +178,15 @@ app.get('/tareas/:idusuario', checkDB, (req, res) => {
     });
 });
 
-// PATCH: Completar (Protegido)
+// PATCH: Actualizar estado de completado (Protegido)
 app.patch('/tareas/:id', checkDB, verificarToken, (req, res) => {
-    pool.query('UPDATE tareas SET completada = 1 WHERE id = ?', [req.params.id], (err) => {
+    const { completada } = req.body;
+    // Si completada es undefined (viejo comportamiento), usamos 1. Si viene en el body, usamos su valor (0 o 1).
+    const nuevoEstado = completada === undefined ? 1 : (completada ? 1 : 0);
+    
+    pool.query('UPDATE tareas SET completada = ? WHERE id = ?', [nuevoEstado, req.params.id], (err) => {
         if (err) return res.status(500).json(err);
-        res.json({ mensaje: 'Estado actualizado' });
+        res.json({ mensaje: 'Estado de tarea actualizado', estado: nuevoEstado });
     });
 });
 

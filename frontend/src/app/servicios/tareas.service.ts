@@ -30,9 +30,14 @@ export class TareasService {
     return this.http.post(this.apiUrl, nuevaTarea).pipe(tap(() => this._refresh$.next()));
   }
 
-  // MÉTODO PARA COMPLETAR (Poner el 1 en Workbench)
+  // MÉTODO PARA COMPLETAR (Estado 1)
   completarTarea(id: string) {
-    return this.http.patch(`${this.apiUrl}/${id}`, {}).pipe(tap(() => this._refresh$.next()));
+    return this.http.patch(`${this.apiUrl}/${id}`, { completada: true }).pipe(tap(() => this._refresh$.next()));
+  }
+
+  // MÉTODO PARA REABRIR (Estado 0)
+  reabrirTarea(id: string) {
+    return this.http.patch(`${this.apiUrl}/${id}`, { completada: false }).pipe(tap(() => this._refresh$.next()));
   }
 
   // MÉTODO PARA EDITAR TAREA

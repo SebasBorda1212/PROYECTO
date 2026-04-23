@@ -18,6 +18,7 @@
         <app-tarea
           [tarea]="tarea"
           (completar)="alCompletarTarea($any($event))"
+          (reabrir)="alReabrirTarea($event)"
           (editar)="alEditarTarea($event)"
           (eliminar)="alEliminarTarea($any($event))"
         />

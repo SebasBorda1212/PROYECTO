@@ -31,8 +31,7 @@ const dbConfig = {
     database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'test',
     ssl: {
         minVersion: 'TLSv1.2',
-        rejectUnauthorized: true,
-        ca: fs.readFileSync(path.join(__dirname, 'ca.pem'))
+        rejectUnauthorized: false
     },
     // Añadimos estos para mayor estabilidad en nubes
     connectTimeout: 10000,

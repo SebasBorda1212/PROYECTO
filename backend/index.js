@@ -22,6 +22,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Configuración compatible con TiDB Cloud (Soporte para CA Física)
+// Configuración compatible con TiDB Cloud (Soporte para CA Física)
 const dbConfig = {
     host: process.env.MYSQLHOST || process.env.DB_HOST,
     user: process.env.MYSQLUSER || process.env.DB_USER,
@@ -32,7 +33,10 @@ const dbConfig = {
         minVersion: 'TLSv1.2',
         rejectUnauthorized: true,
         ca: fs.readFileSync(path.join(__dirname, 'ca.pem'))
-    }
+    },
+    // Añadimos estos para mayor estabilidad en nubes
+    connectTimeout: 10000,
+    enableKeepAlive: true
 };
 
 // Crear el Pool

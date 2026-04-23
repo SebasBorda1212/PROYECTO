@@ -3,7 +3,7 @@ services:
   - type: web
     name: backend-proyecto
     runtime: node
-    plan: starter
+    plan: free
     region: ohio
     buildCommand: cd backend && npm install
     startCommand: cd backend && node index.js

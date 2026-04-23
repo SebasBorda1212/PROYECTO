@@ -11,6 +11,13 @@ CREATE TABLE IF NOT EXISTS administradores (
     password VARCHAR(255) NOT NULL
 );
 
+-- Tabla Usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+    id VARCHAR(50) PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    avatar VARCHAR(255)
+);
+
 -- Tabla Tareas
 CREATE TABLE IF NOT EXISTS tareas (
     id VARCHAR(50) PRIMARY KEY,
@@ -18,7 +25,8 @@ CREATE TABLE IF NOT EXISTS tareas (
     resumen TEXT,
     expira DATE,
     idusuario VARCHAR(50),
-    completada TINYINT(1) DEFAULT 0
+    completada TINYINT(1) DEFAULT 0,
+    FOREIGN KEY (idusuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 -- Los datos de 'admin' se crearán automáticamente al iniciar el servidor backend por primera vez.

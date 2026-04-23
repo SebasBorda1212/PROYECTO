@@ -1,14 +1,28 @@
 <app-encabezado (logoClick)="resetSelection()" />
 
 <main>
+  @if (auth.isLoggedIn$ | async) {
+    <div class="admin-controls" style="text-align: center; margin-bottom: 20px;">
+      <button class="btn-premium" (click)="gestorUsuarios.abrirCrear()" style="background: #20c997; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">+ Nuevo Usuario</button>
+    </div>
+  }
+
   <ul id="usuarios">
     @for (usuario of usuarios; track usuario.id) {
-      <li>
+      <li style="position: relative;">
         <app-usuario
           [seleccionado]="usuario.id === idUsuarioSeleccionado"
           [usuario]="usuario"
           (seleccion)="alSeleccionarUsuario($event)"
         />
+        @if (auth.isLoggedIn$ | async) {
+          <button 
+            (click)="gestorUsuarios.abrirEditar(usuario)"
+            style="position: absolute; top: -5px; right: -5px; background: #007bff; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; cursor: pointer; z-index: 10;"
+            title="Editar Usuario">
+            ✎
+          </button>
+        }
       </li>
     }
   </ul>
@@ -18,4 +32,6 @@
   } @else {
     <p id="textoCondicional">Selecciona un usuario de la lista</p>
   }
+
+  <app-gestor-usuarios />
 </main>

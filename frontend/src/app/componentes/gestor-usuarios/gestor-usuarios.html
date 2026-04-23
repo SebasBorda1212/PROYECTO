@@ -1,0 +1,40 @@
+@if (isOpen()) {
+  <div class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>{{ editingUser() ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
+        <button class="close-btn" (click)="cerrarModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nombre del Usuario</label>
+          <input type="text" [(ngModel)]="formData.nombre" placeholder="Ej. Juan Pérez" />
+        </div>
+
+        <div class="form-group">
+          <label>Seleccionar Avatar</label>
+          <div class="avatar-catalog">
+            @for (avatarUrl of catalog; track avatarUrl) {
+              <img 
+                [src]="avatarUrl" 
+                [class.selected]="formData.avatar === avatarUrl"
+                (click)="seleccionarAvatar(avatarUrl)"
+                alt="Avatar Opción" />
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        @if (editingUser()) {
+          <button class="btn btn-danger" (click)="eliminar()">Eliminar</button>
+        }
+        <button class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-primary" (click)="guardar()" [disabled]="!formData.nombre || !formData.avatar">
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+}

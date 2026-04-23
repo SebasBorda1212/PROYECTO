@@ -43,35 +43,10 @@ function setupTables() {
             username VARCHAR(50) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL
         )`,
-        `CREATE TABLE IF NOT EXISTS tareas (
+        `CREATE TABLE IF NOT EXISTS usuarios (
             id VARCHAR(50) PRIMARY KEY,
-            titulo VARCHAR(255) NOT NULL,
-            resumen TEXT,
-            expira DATE,
-            idusuario VARCHAR(50),
-            completada TINYINT(1) DEFAULT 0
-        )`
-    ];
-
-    let completed = 0;
-    queries.forEach(q => {
-        pool.query(q, (err) => {
-            if (err) console.error('❌ Error verificando tabla:', err.message);
-            completed++;
-            if (completed === queries.length) {
-                console.log('📊 Esquema de tablas verificado.');
-                seedAdmin();
-            }
-        });
-    });
-}
-
-function setupTables() {
-    const queries = [
-        `CREATE TABLE IF NOT EXISTS administradores (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(50) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL
+            nombre VARCHAR(255) NOT NULL,
+            avatar VARCHAR(255)
         )`,
         `CREATE TABLE IF NOT EXISTS tareas (
             id VARCHAR(50) PRIMARY KEY,
@@ -79,14 +54,15 @@ function setupTables() {
             resumen TEXT,
             expira DATE,
             idusuario VARCHAR(50),
-            completada TINYINT(1) DEFAULT 0
+            completada TINYINT(1) DEFAULT 0,
+            FOREIGN KEY (idusuario) REFERENCES usuarios(id) ON DELETE CASCADE
         )`
     ];
 
     let completed = 0;
     queries.forEach(q => {
         pool.query(q, (err) => {
-            if (err) console.error('❌ Error creando tabla:', err.message);
+            if (err) console.error('❌ Error verificando tabla:', err.message);
             completed++;
             if (completed === queries.length) {
                 console.log('📊 Esquema de tablas verificado.');
@@ -198,6 +174,49 @@ app.delete('/tareas/:id', checkDB, verificarToken, (req, res) => {
         res.json({ mensaje: 'Borrado físico' });
     });
 });
+// ==========================================
+// RUTAS DE USUARIOS
+// ==========================================
+
+// GET: Todos los usuarios (Público)
+app.get('/usuarios', checkDB, (req, res) => {
+    pool.query('SELECT * FROM usuarios', (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+    });
+});
+
+// POST: Crear usuario (Protegido)
+app.post('/usuarios', checkDB, verificarToken, (req, res) => {
+    const { id, nombre, avatar } = req.body;
+    const sql = 'INSERT INTO usuarios (id, nombre, avatar) VALUES (?, ?, ?)';
+    pool.query(sql, [id, nombre, avatar], (err) => {
+        if (err) return res.status(500).json(err);
+        res.json({ mensaje: 'Usuario guardado' });
+    });
+});
+
+// PUT: Editar usuario (Protegido)
+app.put('/usuarios/:id', checkDB, verificarToken, (req, res) => {
+    const { nombre, avatar } = req.body;
+    const sql = 'UPDATE usuarios SET nombre = ?, avatar = ? WHERE id = ?';
+    pool.query(sql, [nombre, avatar, req.params.id], (err) => {
+        if (err) return res.status(500).json(err);
+        res.json({ mensaje: 'Usuario actualizado' });
+    });
+});
+
+// DELETE: Borrar usuario (Protegido - Borrará tareas en cascada)
+app.delete('/usuarios/:id', checkDB, verificarToken, (req, res) => {
+    pool.query('DELETE FROM usuarios WHERE id = ?', [req.params.id], (err) => {
+        if (err) return res.status(500).json(err);
+        res.json({ mensaje: 'Usuario borrado' });
+    });
+});
+
+// ==========================================
+// RUTAS DE TAREAS
+// ==========================================
 
 // POST: Crear tarea (Protegido)
 app.post('/tareas', checkDB, verificarToken, (req, res) => {

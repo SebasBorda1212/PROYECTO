@@ -1,19 +1,30 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject, ViewChild } from '@angular/core';
 import { Encabezado } from "./componentes/encabezado/encabezado";
 import { Usuario } from './componentes/usuario/usuario';
-import { USUARIOS_FALSOS } from './usuarios-falsos';
 import { Tareas } from './componentes/tareas/tareas';
+import { UsuariosService } from './servicios/usuarios.service';
+import { GestorUsuarios } from './componentes/gestor-usuarios/gestor-usuarios';
+import { AuthService } from './servicios/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Encabezado,Usuario,Tareas],
+  imports: [CommonModule, Encabezado, Usuario, Tareas, GestorUsuarios],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('proyecto_inicial');
-  usuarios = USUARIOS_FALSOS;
+  private usuariosService = inject(UsuariosService);
+  public auth = inject(AuthService); // Añadido para controlar visibilidad de roles
+  
+  @ViewChild(GestorUsuarios) gestorUsuarios!: GestorUsuarios;
+
+  get usuarios() {
+    return this.usuariosService.usuarios();
+  }
+
   idUsuarioSeleccionado?: string;
   
   get usuarioSeleccionado() {

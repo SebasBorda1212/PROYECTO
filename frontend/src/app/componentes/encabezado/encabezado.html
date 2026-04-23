@@ -1,27 +1,30 @@
 <header>
-    <img src="https://yt3.googleusercontent.com/hHrNKyAZYQuWOeu4ta8bkV12DXH7ytaR1HOaC3MTUcT9rLjuut-AZs909zoC0s3pgCUJKUgGhw=s900-c-k-c0x00ffffff-no-rj" alt="Logo de vegetta" style="width: 4rem; height: 4rem; filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.6)); cursor: pointer;" (click)="onLogoClick()">
+    <img src="https://static.wikia.nocookie.net/youtubepedia/images/a/a1/VEGETTA777%2C.%2C%2C%2C.png/revision/latest?cb=20240611071309&path-prefix=es"
+        alt="Logo de vegetta"
+        style="width: 4rem; height: 4rem; filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.6)); cursor: pointer;"
+        (click)="onLogoClick()">
     <div>
         <h1 style="cursor: pointer;" (click)="onLogoClick()">GESTOR DE TAREAS</h1>
         <p>Tareas Importantes</p>
     </div>
     <div class="auth-actions" style="margin-left: auto;">
         @if (authService.isLoggedIn$ | async) {
-            <div class="admin-badge">
-                <span>Hola, {{ authService.username$ | async }}</span>
-                <button (click)="openSettings('perfil')" class="btn-settings">👤 Editar Perfil</button>
-                <button (click)="openSettings('nuevo')" class="btn-settings">➕ Nuevo Admin</button>
-                <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
-            </div>
+        <div class="admin-badge">
+            <span>Hola, {{ authService.username$ | async }}</span>
+            <button (click)="openSettings('perfil')" class="btn-settings">👤 Editar Perfil</button>
+            <button (click)="openSettings('nuevo')" class="btn-settings">➕ Nuevo Admin</button>
+            <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
+        </div>
         } @else {
-            <button (click)="openLogin()" class="btn-login">Acceso Admin</button>
+        <button (click)="openLogin()" class="btn-login">Acceso Admin</button>
         }
     </div>
 </header>
 
 @if (isLoginModalOpen) {
-    <app-login (close)="closeLogin()"></app-login>
+<app-login (close)="closeLogin()"></app-login>
 }
 
 @if (activeSettingsTab) {
-    <app-ajustes-admin [startTab]="activeSettingsTab" (close)="closeSettings()"></app-ajustes-admin>
+<app-ajustes-admin [startTab]="activeSettingsTab" (close)="closeSettings()"></app-ajustes-admin>
 }
